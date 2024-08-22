@@ -10,7 +10,7 @@ def home(request):
 
 
 def filter(request):
-    data = []
+    data = {}
     state_province = set()
 
     if request.method == 'POST':
