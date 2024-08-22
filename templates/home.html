@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Search </title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load bootstrap_icons %}
+    {% load static %}
+</head>
+<body style="margin: 50px;">
+<div class="container text-center">
+    <div class="row">
+        <div class="col">
+            <div class="container">
+                <form method="post" action="{% url 'filter' %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="form mb-3">
+                                <input type="text" class="form-control" name="country"
+                                       placeholder="country" style="height: 40px;">
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-success">
+                                {% bs_icon 'search' %}
+                                &nbsp;
+                                search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col">
+            {% if state_province %}
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    State Province
+                </button>
+                <ul class="dropdown-menu m-1" style="height: 200px; overflow-y: scroll;">
+                    {% for province in state_province %}
+                    <li> {{ province }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% else %}
+            <p>No state/province data available.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row m-3">
+        <div class="container-fluid">
+            <form>
+                <div class="row gap-4">
+                    {% if data %}
+                    {% for university in data %}
+                    <div class="card" style="width: 18rem;">
+                        <img id="image-to-download" src="{% static 'university.jpg' %}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title"> {{ university.name }} </h5>
+                            <p class="card-text">
+                                {% for web in university.web_pages %}
+                                {% endfor %}
+                            </p>
+                            <a id="download-link" download>
+                                <button class="btn btn-primary" type="button">Download Image</button>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var img = document.getElementById("image-to-download");
+        var downloadLink = document.getElementById("download-link");
+
+        downloadLink.href = img.src;
+    });
+</script>
+</body>
+</html>
